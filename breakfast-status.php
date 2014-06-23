@@ -12,10 +12,8 @@ require "MinecraftQuery.class.php";
 $breakfast_status_icon = array( 'bacon', 'bagel', 'donut' );
 
 
-class Breakfast_Status_Widget extends WP_Widget
-{
-	public function __construct()
-	{
+class Breakfast_Status_Widget extends WP_Widget {
+	public function __construct() {
 		parent::WP_Widget(
 			'breakfast_status_widget',
 			__( 'Breakfast Status Widget', 'text_domain' ),
@@ -23,17 +21,16 @@ class Breakfast_Status_Widget extends WP_Widget
 		);
 	}
 
-	public function widget( $args, $instance )
-	{
-		$Query = new MinecraftQuery();
+	public function widget( $args, $instance ) {
+		$Query   = new MinecraftQuery();
 		$players = get_transient( $args['widget_id'] . '_players' );
-		$status = get_transient( $args['widget_id'] . '_status' );
+		$status  = get_transient( $args['widget_id'] . '_status' );
 
 		if ( $status === false ) {
 			try {
 				$Query->Connect( $instance['query_host'], $instance['query_port'] );
 				$players = $Query->GetPlayers();
-				$info = $Query->GetInfo();
+				$info    = $Query->GetInfo();
 				set_transient( $args['widget_id'] . '_players', $players, 60 );
 				if ( is_array( $info ) ) {
 					set_transient( $args['widget_id'] . '_status', 'up', 60 );
@@ -47,11 +44,11 @@ class Breakfast_Status_Widget extends WP_Widget
 			}
 		}
 
-
 		$title = apply_filters( 'widget_title', $instance['title'] );
 		echo $args['before_widget'];
-		if ( ! empty( $title ) )
+		if ( ! empty( $title ) ) {
 			echo $args['before_title'] . $title . $args['after_title'];
+		}
 		?>
 		<div class="row">
 
@@ -79,21 +76,18 @@ class Breakfast_Status_Widget extends WP_Widget
 			</div>
 		</div>
 		<?php
-
 		echo $args['after_widget'];
-
 	}
 
-	public function form( $instance )
-	{
+	public function form( $instance ) {
 		global $breakfast_status_icon;
 		$defaults = array(
-			'title' => 'Server',
-			'query_host' => 'localhost',
-			'query_port' => '25576',
-			'mod_pack' => 'Vanilla',
+			'title'          => 'Server',
+			'query_host'     => 'localhost',
+			'query_port'     => '25576',
+			'mod_pack'       => 'Vanilla',
 			'server_address' => 'localhost',
-			'icon' => 'bacon',
+			'icon'           => 'bacon',
 		);
 
 		$instance = wp_parse_args( $instance, $defaults );
@@ -102,37 +96,37 @@ class Breakfast_Status_Widget extends WP_Widget
 
 		<p><label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>"
-				   name="<?php echo $this->get_field_name( 'title' ); ?>"
-				   type="text" value="<?php echo esc_attr( $instance['title'] ); ?>"/>
+			       name="<?php echo $this->get_field_name( 'title' ); ?>"
+			       type="text" value="<?php echo esc_attr( $instance['title'] ); ?>"/>
 		</p>
 
 		<p><label for="<?php echo $this->get_field_id( 'mod_pack' ); ?>"><?php _e( 'Mod Pack:' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'mod_pack' ); ?>"
-				   name="<?php echo $this->get_field_name( 'mod_pack' ); ?>"
-				   type="text" value="<?php echo esc_attr( $instance['mod_pack'] ); ?>"/>
+			       name="<?php echo $this->get_field_name( 'mod_pack' ); ?>"
+			       type="text" value="<?php echo esc_attr( $instance['mod_pack'] ); ?>"/>
 		</p>
 
 		<p><label for="<?php echo $this->get_field_id( 'server_address' ); ?>"><?php _e( 'Server Address:' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'server_address' ); ?>"
-				   name="<?php echo $this->get_field_name( 'server_address' ); ?>"
-				   type="text" value="<?php echo esc_attr( $instance['server_address'] ); ?>"/>
+			       name="<?php echo $this->get_field_name( 'server_address' ); ?>"
+			       type="text" value="<?php echo esc_attr( $instance['server_address'] ); ?>"/>
 		</p>
 
 		<p><label for="<?php echo $this->get_field_id( 'query_host' ); ?>"><?php _e( 'Query Host:' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( ' query_host' ); ?>"
-				   name="<?php echo $this->get_field_name( 'query_host' ); ?>"
-				   type="text" value="<?php echo esc_attr( $instance['query_host'] ); ?>"/>
+			       name="<?php echo $this->get_field_name( 'query_host' ); ?>"
+			       type="text" value="<?php echo esc_attr( $instance['query_host'] ); ?>"/>
 		</p>
 
 		<p><label for="<?php echo $this->get_field_id( 'query_port' ); ?>"><?php _e( 'Query Port:' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'query_port' ); ?>"
-				   name="<?php echo $this->get_field_name( 'query_port' ); ?>"
-				   type="text" value="<?php echo esc_attr( $instance['query_port'] ); ?>"/>
+			       name="<?php echo $this->get_field_name( 'query_port' ); ?>"
+			       type="text" value="<?php echo esc_attr( $instance['query_port'] ); ?>"/>
 		</p>
 
 		<p><label for="<?php echo $this->get_field_id( 'icon' ); ?>"><?php _e( 'Icon:' ); ?></label>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'icon' ); ?>"
-					name="<?php echo $this->get_field_name( 'icon' ); ?>">
+			        name="<?php echo $this->get_field_name( 'icon' ); ?>">
 				<?php foreach ( $breakfast_status_icon as $value ) : ?>
 					<option
 						value="<?php echo $value; ?>" <?php selected( $instance['icon'], $value, false ); ?>><?php echo $value; ?> </option>
@@ -142,11 +136,9 @@ class Breakfast_Status_Widget extends WP_Widget
 
 	<?php
 	}
-
 }
 
-function register_breakfast_status_widget()
-{
+function register_breakfast_status_widget() {
 	register_widget( 'Breakfast_Status_Widget' );
 }
 
