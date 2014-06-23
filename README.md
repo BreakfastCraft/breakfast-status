@@ -4,8 +4,8 @@ A WordPress plugin for querying a Minecraft server and displaying server status 
 
 ## Attributions
 ### xPaw
-* PHP Minecraft Query
-* PHP Source Query
+* <a href="https://github.com/xPaw/PHP-Minecraft-Query" target="_blank">PHP Minecraft Query</a>
+* <a href="https://github.com/xPaw/PHP-Source-Query-Class" target="_blank">PHP Source Query</a>
 
 ## License
 >*This work is licensed under The Do What The Fuck You Want To Public License (WTFPL).
