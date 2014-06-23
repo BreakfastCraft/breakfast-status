@@ -6,7 +6,7 @@
 
  */
 
-require "MinecraftQuery.class.php";
+require( __DIR__ . '/Minecraft-Query/MinecraftQuery.class.php' );
 
 
 $breakfast_status_icon = array( 'bacon', 'bagel', 'donut' );
@@ -69,7 +69,7 @@ class Breakfast_Status_Widget extends WP_Widget {
 
 					<?php foreach ( $players as $player ): ?>
 						<a href="#" data-toggle="tooltip" data-placement="bottom" title="<?php echo $player ?>"><img
-								src="<?php echo plugins_url(); ?>/breakfast-status/face.php?s=24&u=<?php echo $player; ?>"></a>
+								src="<?php echo plugins_url(); ?>/breakfast-status/Minecraft-Avatar/face.php?s=24&u=<?php echo $player; ?>"></a>
 					<?php endforeach; ?>
 
 				<?php endif; ?>
