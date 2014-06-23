@@ -19,23 +19,36 @@ class Breakfast_Status_Widget extends WP_Widget {
 			'breakfast_status_widget',
 			__( 'Breakfast Status Widget', 'text_domain'),
 			array( 'description' => __( 'A Minecraft server status widget', 'text_domain' ), )
-		);	
+		);
 	}
 
 	public function widget( $args, $instance ) {
 		$Query = new MinecraftQuery( );
+		$players = get_transient($args['widget_id'].'_players');
+		$status = get_transient($args['widget_id'].'_status');
 
-		try
-		{
-		    $Query->Connect( $instance['query_host'], $instance['query_port'] );
-		    $info = $Query->GetInfo();
-		    $players = $Query->GetPlayers();
-		    $status = "up";
+		if($status === false) {
+			try
+			{
+				$Query->Connect( $instance['query_host'], $instance['query_port'] );
+				$players = $Query->GetPlayers();
+				$info = $Query->GetInfo();
+				set_transient($args['widget_id'].'_players', $players, 60);
+				if(is_array($info)){
+					set_transient($args['widget_id'].'_status', "up", 60);
+					$status = "up";
+				} else {
+					set_transient($args['widget_id'].'_status', "down", 60);
+					$status = "down";
+				}
+
+			}
+			catch( MinecraftQueryException $e )
+			{
+				$status = "down";
+			}
 		}
-		catch( MinecraftQueryException $e )
-		{
-		    $status = "down";
-		}
+
 
 		$title =  apply_filters('widget_title', $instance['title']);
 		echo $args['before_widget'];
@@ -43,8 +56,8 @@ class Breakfast_Status_Widget extends WP_Widget {
 			echo $args['before_title'] . $title . $args['after_title'];
 		?>
 		<div class="row">
-			
-		
+
+
 			<div class="col-xs-3">
 				<img src="<?php echo plugins_url(); ?>/breakfast-status/icons/<?php echo $instance['icon']; ?>_<?php echo $status; ?>.png" />
 			</div>
@@ -85,27 +98,27 @@ class Breakfast_Status_Widget extends WP_Widget {
 		?>
 
 		<p><label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" 
+		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>"
 			type="text" value="<?php echo esc_attr( $instance['title'] ); ?>" />
 		</p>
 
 		<p><label for="<?php echo $this->get_field_id( 'mod_pack' ); ?>"><?php _e( 'Mod Pack:' ); ?></label>
-		<input class="widefat" id="<?php echo $this->get_field_id( 'mod_pack' ); ?>" name="<?php echo $this->get_field_name( 'mod_pack' ); ?>" 
+		<input class="widefat" id="<?php echo $this->get_field_id( 'mod_pack' ); ?>" name="<?php echo $this->get_field_name( 'mod_pack' ); ?>"
 			type="text" value="<?php echo esc_attr( $instance['mod_pack'] ); ?>" />
 		</p>
 
 		<p><label for="<?php echo $this->get_field_id( 'server_address'); ?>"><?php _e( 'Server Address:' ); ?></label>
-		<input class="widefat" id="<?php echo $this->get_field_id( 'server_address' ); ?>" name="<?php echo $this->get_field_name( 'server_address' ); ?>" 
+		<input class="widefat" id="<?php echo $this->get_field_id( 'server_address' ); ?>" name="<?php echo $this->get_field_name( 'server_address' ); ?>"
 			type="text" value="<?php echo esc_attr( $instance['server_address'] ); ?>" />
 		</p>
 
 		<p><label for="<?php echo $this->get_field_id( 'query_host' ); ?>"><?php _e( 'Query Host:' ); ?></label>
-		<input class="widefat" id="<?php echo $this->get_field_id(' query_host' ); ?>" name="<?php echo $this->get_field_name( 'query_host' ); ?>" 
+		<input class="widefat" id="<?php echo $this->get_field_id(' query_host' ); ?>" name="<?php echo $this->get_field_name( 'query_host' ); ?>"
 			type="text" value="<?php echo esc_attr( $instance['query_host'] ); ?>" />
 		</p>
 
 		<p><label for="<?php echo $this->get_field_id( 'query_port' ); ?>"><?php _e( 'Query Port:' ); ?></label>
-		<input class="widefat" id="<?php echo $this->get_field_id( 'query_port' ); ?>" name="<?php echo $this->get_field_name( 'query_port' ); ?>" 
+		<input class="widefat" id="<?php echo $this->get_field_id( 'query_port' ); ?>" name="<?php echo $this->get_field_name( 'query_port' ); ?>"
 			type="text" value="<?php echo esc_attr( $instance['query_port'] ); ?>" />
 		</p>
 
