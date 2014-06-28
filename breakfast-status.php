@@ -6,13 +6,17 @@
 
  */
 
-require( __DIR__ . '/Minecraft-Query/MinecraftQuery.class.php' );
+if ( !class_exists( 'MinecraftQuery' ) ) {
+	require( __DIR__ . '/Minecraft-Query/MinecraftQuery.class.php' );
+}
 
 
-$breakfast_status_icon = array( 'bacon', 'bagel', 'donut' );
+
 
 
 class Breakfast_Status_Widget extends WP_Widget {
+
+	private $status_icon = array( 'bacon', 'bagel', 'donut' );
 	public function __construct() {
 		parent::WP_Widget(
 			'breakfast_status_widget',
@@ -22,15 +26,15 @@ class Breakfast_Status_Widget extends WP_Widget {
 	}
 
 	public function widget( $args, $instance ) {
-		$Query   = new MinecraftQuery();
+		$Query = new MinecraftQuery();
 		$players = get_transient( $args['widget_id'] . '_players' );
-		$status  = get_transient( $args['widget_id'] . '_status' );
+		$status = get_transient( $args['widget_id'] . '_status' );
 
 		if ( $status === false ) {
 			try {
 				$Query->Connect( $instance['query_host'], $instance['query_port'] );
 				$players = $Query->GetPlayers();
-				$info    = $Query->GetInfo();
+				$info = $Query->GetInfo();
 				set_transient( $args['widget_id'] . '_players', $players, 60 );
 				if ( is_array( $info ) ) {
 					set_transient( $args['widget_id'] . '_status', 'up', 60 );
@@ -46,7 +50,7 @@ class Breakfast_Status_Widget extends WP_Widget {
 
 		$title = apply_filters( 'widget_title', $instance['title'] );
 		echo $args['before_widget'];
-		if ( ! empty( $title ) ) {
+		if ( !empty( $title ) ) {
 			echo $args['before_title'] . $title . $args['after_title'];
 		}
 		?>
@@ -65,7 +69,7 @@ class Breakfast_Status_Widget extends WP_Widget {
 		</div>
 		<div class="row" style="margin-top: 5px;">
 			<div class="col-xs-12">
-				<?php if ( ! empty( $players ) ) : ?>
+				<?php if ( !empty( $players ) ) : ?>
 
 					<?php foreach ( $players as $player ): ?>
 						<a href="#" data-toggle="tooltip" data-placement="bottom" title="<?php echo $player ?>"><img
@@ -82,12 +86,12 @@ class Breakfast_Status_Widget extends WP_Widget {
 	public function form( $instance ) {
 		global $breakfast_status_icon;
 		$defaults = array(
-			'title'          => 'Server',
-			'query_host'     => 'localhost',
-			'query_port'     => '25576',
-			'mod_pack'       => 'Vanilla',
+			'title' => 'Server',
+			'query_host' => 'localhost',
+			'query_port' => '25576',
+			'mod_pack' => 'Vanilla',
 			'server_address' => 'localhost',
-			'icon'           => 'bacon',
+			'icon' => 'bacon',
 		);
 
 		$instance = wp_parse_args( $instance, $defaults );
@@ -127,9 +131,9 @@ class Breakfast_Status_Widget extends WP_Widget {
 		<p><label for="<?php echo $this->get_field_id( 'icon' ); ?>"><?php _e( 'Icon:' ); ?></label>
 			<select class="widefat" id="<?php echo $this->get_field_id( 'icon' ); ?>"
 			        name="<?php echo $this->get_field_name( 'icon' ); ?>">
-				<?php foreach ( $breakfast_status_icon as $value ) : ?>
+				<?php foreach ( $this->status_icon as $value ) : ?>
 					<option
-						value="<?php echo $value; ?>" <?php selected( $instance['icon'], $value, false ); ?>><?php echo $value; ?> </option>
+						value="<?php echo $value; ?>" <?php echo selected( $instance['icon'], $value, false ); ?>><?php echo $value; ?> </option>
 				<?php endforeach; ?>
 			</select>
 		</p>
