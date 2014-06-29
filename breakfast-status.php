@@ -59,7 +59,7 @@ class Breakfast_Status_Widget extends WP_Widget {
 
 			<div class="col-xs-3">
 				<img
-					src="<?php echo plugins_url(); ?>/breakfast-status/icons/<?php echo $instance['icon']; ?>_<?php echo $status; ?>.png"/>
+					src="<?php echo plugins_url("icons/${instance['icon']}_$status.png", __FILE__); ?>" />
 			</div>
 			<div class="col-xs-9">
 				<p><?php echo $instance['mod_pack']; ?></p>
@@ -73,7 +73,7 @@ class Breakfast_Status_Widget extends WP_Widget {
 
 					<?php foreach ( $players as $player ): ?>
 						<a href="#" data-toggle="tooltip" data-placement="bottom" title="<?php echo $player ?>"><img
-								src="<?php echo plugins_url(); ?>/breakfast-status/Minecraft-Avatar/face.php?s=24&u=<?php echo $player; ?>"></a>
+								src="<?php echo plugins_url("Minecraft-Avatar/face.php?s=24&u=$player", __FILE__); ?>"></a>
 					<?php endforeach; ?>
 
 				<?php endif; ?>
